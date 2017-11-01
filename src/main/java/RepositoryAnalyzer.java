@@ -6,7 +6,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -18,7 +17,7 @@ import org.eclipse.jgit.revwalk.RevCommit;
 
 public class RepositoryAnalyzer {
 
-	
+	//looks for *args[1]* in the repositories found in *args[0]* and saves the results in *args[2]*
 	public static void main(String[] args) throws NoHeadException, IOException, GitAPIException {
 		
 		//directory where the repositories are located
@@ -36,13 +35,13 @@ public class RepositoryAnalyzer {
 		BufferedWriter writer = new BufferedWriter( new FileWriter(destFile));
 		PrintWriter printWriter = new PrintWriter(writer);
 		
-		printWriter.println(Arrays.toString(directories));
+		//printWriter.println(Arrays.toString(directories));
 		
-		
+		//cycles through the repositories found
 		for(String d : directories){
 			String projectDir = baseDir+"\\"+d;
 			File pdir = new File(projectDir);
-			if(pdir.isDirectory()){
+			if(pdir.isDirectory() && new File(pdir, ".git").exists()){
 				
 				//finds the most used programming language in the repository
 				HashMap<Integer,String> sourceCodeFilesCount = new HashMap<Integer,String>();
@@ -70,7 +69,7 @@ public class RepositoryAnalyzer {
 		
 	}
 	
-	//gets comments is code and looks for regression
+	//gets comments is code and looks for keyword
 	private static void getRegressionIssuesInComments(String localDir, String fileExtension, PrintWriter printWriter, String whatToLookFor) throws IOException {
 		
 		ArrayList<File> sourceCodeFiles = new ArrayList<File>();
@@ -101,7 +100,7 @@ public class RepositoryAnalyzer {
 
 	}
 	
-	//gets list of java files in directories and subdirectories
+	//gets list of source code files in directories and subdirectories
 	public static void finder(String dirName, ArrayList<File> sourceCodeFiles, String fileExtension){
 		
 		File dir = new File(dirName);
@@ -117,7 +116,7 @@ public class RepositoryAnalyzer {
 
     }
 
-	//gets commit messages and looks for regression
+	//gets commit messages and looks for keyword
 	static public void getRegressionIssuesInCommitMessages(String localDir, PrintWriter printWriter, String whatToLookFor) throws IOException, NoHeadException, GitAPIException {
 	
 	int commitsCount = 0;
