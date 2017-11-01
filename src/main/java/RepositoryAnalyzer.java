@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -41,11 +43,22 @@ public class RepositoryAnalyzer {
 			String projectDir = baseDir+"\\"+d;
 			File pdir = new File(projectDir);
 			if(pdir.isDirectory()){
-				BufferedReader br = new BufferedReader(new FileReader(projectDir+"\\"+"programmingLanguage.txt"));
-				String line = br.readLine();
-				br.close();
-				String fileExtension = line;
+				
+				//finds the most used programming language in the repository
+				HashMap<Integer,String> sourceCodeFilesCount = new HashMap<Integer,String>();
+				ArrayList<File> sourceCodeFiles = new ArrayList<File>();
+				String[] programmingLanguages = {"java","c","py","go","js","scala","rb"};
+
+				for(String pl : programmingLanguages){
+					//counts all *pl* source code files
+					finder(pdir.getAbsolutePath(),sourceCodeFiles,pl);
+					sourceCodeFilesCount.put(sourceCodeFiles.size(),pl);
+					sourceCodeFiles.clear();
+				}
+				
+				String fileExtension = sourceCodeFilesCount.get(Collections.max(sourceCodeFilesCount.keySet()));
 				printWriter.println("analyzing repository: "+d);
+				
 				getRegressionIssuesInCommitMessages(projectDir, printWriter, whatToLookFor);
 				getRegressionIssuesInComments(projectDir, fileExtension, printWriter, whatToLookFor);
 			}
@@ -60,12 +73,12 @@ public class RepositoryAnalyzer {
 	//gets comments is code and looks for regression
 	private static void getRegressionIssuesInComments(String localDir, String fileExtension, PrintWriter printWriter, String whatToLookFor) throws IOException {
 		
-		ArrayList<File> javaFiles = new ArrayList<File>();
+		ArrayList<File> sourceCodeFiles = new ArrayList<File>();
 		ArrayList<String> comments = new ArrayList<String>();
 
-		finder(localDir, javaFiles, fileExtension);
-		printWriter.println("."+fileExtension + " source code files found: "+javaFiles.size());
-		for(File f : javaFiles){
+		finder(localDir, sourceCodeFiles, fileExtension);
+		printWriter.println("."+fileExtension + " source code files found: "+sourceCodeFiles.size());
+		for(File f : sourceCodeFiles){
 			BufferedReader br = new BufferedReader(new FileReader(f));
 			String line;
 			int lineNumber = 0;
@@ -89,15 +102,15 @@ public class RepositoryAnalyzer {
 	}
 	
 	//gets list of java files in directories and subdirectories
-	public static void finder(String dirName, ArrayList<File> javaFiles, String fileExtension){
-        
+	public static void finder(String dirName, ArrayList<File> sourceCodeFiles, String fileExtension){
+		
 		File dir = new File(dirName);
 		File[] filesList = dir.listFiles();
         for (File file : filesList) {
         	if (file.getName().endsWith("."+fileExtension)) {
-        		javaFiles.add(file);
+        		sourceCodeFiles.add(file);
             } else if (file.isDirectory()) {
-                finder(file.getAbsolutePath(), javaFiles, fileExtension);
+                finder(file.getAbsolutePath(), sourceCodeFiles, fileExtension);
             }
         }
         
