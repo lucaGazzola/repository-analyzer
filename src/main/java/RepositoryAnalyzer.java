@@ -16,17 +16,22 @@ import org.eclipse.jgit.revwalk.RevCommit;
 
 public class RepositoryAnalyzer {
 
-	//what keyword to look for
-	static String whatToLookFor = "regression";
-
 	
 	public static void main(String[] args) throws NoHeadException, IOException, GitAPIException {
 		
-		String baseDir = "C:\\Users\\gianni\\Desktop\\work\\microservices";
+		//directory where the repositories are located
+		String baseDir = args[0];
+		
+		//what keyword to look for
+		String whatToLookFor = args[1];
+		
+		//where to save the analysis
+		String destFile = args[2];
+		
 		File file = new File(baseDir);
 		String[] directories = file.list();
 		
-		BufferedWriter writer = new BufferedWriter( new FileWriter("C:\\Users\\gianni\\Desktop\\work\\microservices\\stats.txt"));
+		BufferedWriter writer = new BufferedWriter( new FileWriter(destFile));
 		PrintWriter printWriter = new PrintWriter(writer);
 		
 		printWriter.println(Arrays.toString(directories));
@@ -41,8 +46,8 @@ public class RepositoryAnalyzer {
 				br.close();
 				String fileExtension = line;
 				printWriter.println("analyzing repository: "+d);
-				getRegressionIssuesInCommitMessages(projectDir, printWriter);
-				getRegressionIssuesInComments(projectDir, fileExtension, printWriter);
+				getRegressionIssuesInCommitMessages(projectDir, printWriter, whatToLookFor);
+				getRegressionIssuesInComments(projectDir, fileExtension, printWriter, whatToLookFor);
 			}
 		}
 		
@@ -53,7 +58,7 @@ public class RepositoryAnalyzer {
 	}
 	
 	//gets comments is code and looks for regression
-	private static void getRegressionIssuesInComments(String localDir, String fileExtension, PrintWriter printWriter) throws IOException {
+	private static void getRegressionIssuesInComments(String localDir, String fileExtension, PrintWriter printWriter, String whatToLookFor) throws IOException {
 		
 		ArrayList<File> javaFiles = new ArrayList<File>();
 		ArrayList<String> comments = new ArrayList<String>();
@@ -100,7 +105,7 @@ public class RepositoryAnalyzer {
     }
 
 	//gets commit messages and looks for regression
-	static public void getRegressionIssuesInCommitMessages(String localDir, PrintWriter printWriter) throws IOException, NoHeadException, GitAPIException {
+	static public void getRegressionIssuesInCommitMessages(String localDir, PrintWriter printWriter, String whatToLookFor) throws IOException, NoHeadException, GitAPIException {
 	
 	int commitsCount = 0;
 	int regressionCount = 0;
