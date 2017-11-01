@@ -1,0 +1,190 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>1</groupId>
+	<artifactId>1</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<repositories>
+		<repository>
+			<id>atlassian-public</id>
+			<url>https://maven.atlassian.com/repository/public</url>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+				<checksumPolicy>warn</checksumPolicy>
+			</releases>
+		</repository>
+		<repository>
+			<id>atlassian-plugin-sdk</id>
+			<url>file://${env.ATLAS_HOME}/repository</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+				<checksumPolicy>warn</checksumPolicy>
+			</releases>
+		</repository>
+		<repository>
+			<id>jgit-repository</id>
+			<url>https://repo.eclipse.org/content/groups/releases/</url>
+		</repository>
+		<repository>
+			<id>eclipse-releases</id>
+			<url>https://repo.eclipse.org/content/groups/releases</url>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>atlassian-public</id>
+			<url>https://maven.atlassian.com/repository/public</url>
+			<releases>
+				<enabled>true</enabled>
+				<checksumPolicy>warn</checksumPolicy>
+			</releases>
+			<snapshots>
+				<updatePolicy>never</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</snapshots>
+		</pluginRepository>
+		<pluginRepository>
+			<id>atlassian-plugin-sdk</id>
+			<url>file://${env.ATLAS_HOME}/repository</url>
+			<releases>
+				<enabled>true</enabled>
+				<checksumPolicy>warn</checksumPolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+	<properties>
+		<downloadSources>true</downloadSources>
+		<downloadJavadocs>true</downloadJavadocs>
+	</properties>
+
+	<dependencies>
+		<!-- <dependency> <groupId>com.sun.jersey</groupId> <artifactId>jersey-client</artifactId> 
+			<version>1.8-atlassian-6</version> <scope>compile</scope> </dependency> <dependency> 
+			<groupId>com.googlecode.json-simple</groupId> <artifactId>json-simple</artifactId> 
+			<version>1.1.1</version> <scope>compile</scope> </dependency> -->
+
+
+		<dependency>
+			<groupId>com.atlassian.jira</groupId>
+			<artifactId>jira-rest-java-client-core</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/com.atlassian.jira/jira-rest-java-client-api -->
+		<!-- 
+ <dependency>
+    <groupId>com.atlassian.jira</groupId>
+    <artifactId>jira-rest-java-client-api</artifactId>
+    <version>4.0.0</version>
+</dependency> 
+-->
+
+
+
+<!-- https://mvnrepository.com/artifact/com.atlassian.jira/jira-rest-java-client-core -->
+<!--
+<dependency>
+    <groupId>com.atlassian.jira</groupId>
+    <artifactId>jira-rest-java-client-core</artifactId>
+    <version>4.0.0</version>
+</dependency>
+
+-->
+
+
+		<!-- <dependency> <groupId>com.atlassian.stash</groupId> <artifactId>stash-api</artifactId> 
+			<version>3.7.0</version> </dependency> <dependency> <groupId>com.atlassian.stash</groupId> 
+			<artifactId>stash-jira-integration</artifactId> <version>3.7.0</version> 
+			</dependency> -->
+
+		<dependency>
+			<groupId>org.eclipse.jgit</groupId>
+			<artifactId>org.eclipse.jgit</artifactId>
+			<version>4.0.0.201505050340-m2</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>httpclient</artifactId>
+					<groupId>org.apache.httpcomponents</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>com.jcraft</groupId>
+			<artifactId>jsch</artifactId>
+			<version>0.1.54</version>
+		</dependency>
+
+
+
+		<dependency>
+			<groupId>org.eclipse.jdt</groupId>
+			<artifactId>org.eclipse.jdt.core</artifactId>
+			<version>3.10.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.jface</groupId>
+			<artifactId>text</artifactId>
+			<version>3.3.0-v20070606-0010</version>
+		</dependency>
+
+
+
+
+
+
+
+		<dependency>
+			<groupId>org.eclipse</groupId>
+			<artifactId>jface</artifactId>
+			<version>3.3.0-I20070606-0010</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.eclipse</groupId>
+			<artifactId>swt</artifactId>
+			<version>3.3.0-v3346</version>
+		</dependency>
+
+		<dependency>
+			<groupId>eu.ralph-schuster</groupId>
+			<artifactId>b4j</artifactId>
+			<version>2.0.2</version>
+		</dependency>
+		<!-- <dependency> <groupId>org.kohsuke</groupId> <artifactId>github-api</artifactId> 
+			<version>1.68</version> </dependency> <dependency> <groupId>org.eclipse.mylyn.github</groupId> 
+			<artifactId>org.eclipse.egit.github.core</artifactId> <version>2.1.5</version> 
+			</dependency> <dependency> <groupId>org.eclipse.jgit</groupId> <artifactId>org.eclipse.jgit.http.server</artifactId> 
+			<version>3.7.0.201502260915-r</version> </dependency> <dependency> <groupId>org.eclipse.jgit</groupId> 
+			<artifactId>org.eclipse.jgit.ui</artifactId> <version>3.7.0.201502260915-r</version> 
+			</dependency> <dependency> <groupId>org.eclipse.jgit</groupId> <artifactId>org.eclipse.jgit.junit</artifactId> 
+			<version>3.7.0.201502260915-r</version> </dependency> <dependency> <groupId>commons-collections</groupId> 
+			<artifactId>commons-collections</artifactId> <version>3.2.1</version> </dependency> -->
+	</dependencies>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>httpclient</artifactId>
+				<version>4.2.1-atlassian-2</version>
+			</dependency>
+
+
+
+		</dependencies>
+	</dependencyManagement>
+</project>
