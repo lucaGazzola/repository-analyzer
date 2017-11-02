@@ -49,14 +49,17 @@ public class RepositoryAnalyzer {
 				String[] programmingLanguages = {"java","c","py","go","js","scala","rb"};
 
 				for(String pl : programmingLanguages){
-					//counts all *pl* source code files
+					//counts all *pl* source code files bytes
+					int bytes = 0;
 					finder(pdir.getAbsolutePath(),sourceCodeFiles,pl);
-					sourceCodeFilesCount.put(sourceCodeFiles.size(),pl);
+					for(File f : sourceCodeFiles)
+						bytes += f.length();
+					sourceCodeFilesCount.put(bytes,pl);
 					sourceCodeFiles.clear();
 				}
 				
 				String fileExtension = sourceCodeFilesCount.get(Collections.max(sourceCodeFilesCount.keySet()));
-				printWriter.println("analyzing repository: "+d);
+				printWriter.println("analyzing repository: "+d+" language: "+sourceCodeFilesCount.get(Collections.max(sourceCodeFilesCount.keySet())));
 				
 				getRegressionIssuesInCommitMessages(projectDir, printWriter, whatToLookFor);
 				getRegressionIssuesInComments(projectDir, fileExtension, printWriter, whatToLookFor);
@@ -131,7 +134,7 @@ public class RepositoryAnalyzer {
     Iterable<RevCommit> log = git.log().call();
     for (Iterator<RevCommit> iterator = log.iterator(); iterator.hasNext();) {
     	RevCommit rev = iterator.next();
-    	logMessages.add(rev.getFullMessage());
+    	logMessages.add("Commit "+rev.getName()+": "+rev.getFullMessage());
     	commitsCount++;
     }
     
